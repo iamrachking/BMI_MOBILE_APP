@@ -1,0 +1,28 @@
+# Générer les icônes : dart run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: "assets/images/logo_icon.png"
+
+  android: true
+  min_sdk_android: 21
+  adaptive_icon_background: "#2e4053"
+  adaptive_icon_foreground: "assets/images/logo_icon.png"
+
+  adaptive_icon_foreground_inset: 27
+
+  ios: true
+  remove_alpha_ios: true
+
+  web:
+    generate: true
+    image_path: "assets/images/logo_icon.png"
+    background_color: "#2e4053"
+    theme_color: "#2e4053"
+
+  windows:
+    generate: true
+    image_path: "assets/images/logo_icon.png"
+    icon_size: 48
+
+  macos:
+    generate: true
+    image_path: "assets/images/logo_icon.png"
