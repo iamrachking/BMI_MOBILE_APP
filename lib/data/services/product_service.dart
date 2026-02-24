@@ -20,15 +20,12 @@ class ProductService {
         if (withProducts) 'with_products': 1,
       },
     );
-    return ApiResponse.fromJson(
-      res.data as Map<String, dynamic>,
-      (d) {
-        final List items = d is Map ? (d['data'] as List? ?? []) : (d as List);
-        return items 
-            .map((e) => CategoryModel.fromJson(e as Map<String, dynamic>))
-            .toList();
-      },
-    );
+    return ApiResponse.fromJson(res.data as Map<String, dynamic>, (d) {
+      final List items = d is Map ? (d['data'] as List? ?? []) : (d as List);
+      return items
+          .map((e) => CategoryModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+    });
   }
 
   /// Get a specific category
@@ -47,22 +44,16 @@ class ProductService {
     int perPage = 20,
     int page = 1,
   }) async {
-    final q = <String, dynamic>{
-      'per_page': perPage,
-      'page': page,
-    };
+    final q = <String, dynamic>{'per_page': perPage, 'page': page};
     if (categoryId != null) q['category_id'] = categoryId;
     if (search != null && search.isNotEmpty) q['search'] = search;
     final res = await _dio.get('/products', queryParameters: q);
-    return ApiResponse.fromJson(
-      res.data as Map<String, dynamic>,
-      (d) {
-        final List items = d is Map ? (d['data'] as List? ?? []) : (d as List);
-        return items
-            .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
-            .toList();
-      }
-    );
+    return ApiResponse.fromJson(res.data as Map<String, dynamic>, (d) {
+      final List items = d is Map ? (d['data'] as List? ?? []) : (d as List);
+      return items
+          .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+    });
   }
 
   /// Get a specific product

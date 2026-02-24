@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'BMI',
+      title: 'BMI SHOP',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
       getPages: AppPages.routes,

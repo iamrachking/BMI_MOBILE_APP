@@ -52,13 +52,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // Illustration en haut, comme sur les maquettes — sans carte
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
                 itemCount: _pages.length,
                 onPageChanged: (i) => setState(() => _currentPage = i),
-                itemBuilder: (context, i) => _OnboardingImage(imagePath: _pages[i].imagePath),
+                itemBuilder: (context, i) =>
+                    _OnboardingImage(imagePath: _pages[i].imagePath),
               ),
             ),
             _buildIndicators(),
@@ -141,7 +141,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-                  child: const Text('DÉMARRER'),
+              child: const Text('DÉMARRER'),
             )
           : Row(
               children: [

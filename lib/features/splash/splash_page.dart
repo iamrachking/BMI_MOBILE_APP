@@ -67,7 +67,7 @@ class _SplashPageState extends State<SplashPage> {
               _buildLogo(),
               const SizedBox(height: 24),
               Text(
-                'BMI',
+                'BMI SHOP',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,

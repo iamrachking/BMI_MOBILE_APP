@@ -17,11 +17,9 @@ class BannerModel {
   });
 }
 
-
 class HomeController extends GetxController {
-
   final isLoadingCategories = true.obs;
-  final isLoadingProducts= true.obs;
+  final isLoadingProducts = true.obs;
   final isLoadingMore = false.obs;
   final currentPage = 1.obs;
   final hasMorePages = true.obs;
@@ -29,11 +27,11 @@ class HomeController extends GetxController {
   final banners = <BannerModel>[].obs;
   final categories = <CategoryModel>[].obs;
   final products = <ProductModel>[].obs;
-  
+
   final selectedCategory = 0.obs;
   final searchQuery = ''.obs;
 
-  final ProductService _Products = ProductService();
+  final ProductService _productService = ProductService();
 
   @override
   void onInit() {
@@ -46,31 +44,41 @@ class HomeController extends GetxController {
   void _loadBanner() {
     banners.value = [
       BannerModel(
-        title: 'BMI',
-        subtitle: 'Bénin Moto Industry',
+        title: '',
+        subtitle: '',
         disclaimer: 'Des pièces conçues par la précision industrielle.',
-        imageUrl: 'assets/images/pieces.png',
+        imageUrl: 'assets/images/banner1.jpg',
+      ),
+      BannerModel(
+        title: '',
+        subtitle: '',
+        disclaimer: 'Des pièces conçues par la précision industrielle.',
+        imageUrl: 'assets/images/banner2.jpg',
+      ),
+      BannerModel(
+        title: '',
+        subtitle: '',
+        disclaimer: 'Des pièces conçues par la précision industrielle.',
+        imageUrl: 'assets/images/banner3.jpg',
       ),
     ];
   }
-  
+
   Future<void> fetchCategories() async {
     try {
       isLoadingCategories.value = true;
-      final response = await _Products.getCategories();
+      final response = await _productService.getCategories();
 
       if (response.data != null) {
         categories.value = response.data!;
       }
-    } catch (e) {
+    } catch (_) {
       Get.snackbar('Erreur', 'Impossible de charger les catégories');
-      print('fetchCategories error: $e');
     } finally {
       isLoadingCategories.value = false;
     }
   }
 
-  
   Future<void> fetchProducts({bool reset = true}) async {
     if (reset) {
       currentPage.value = 1;
@@ -86,7 +94,7 @@ class HomeController extends GetxController {
         categoryId = categories[catIndex - 1].id;
       }
 
-      final response = await _Products.getProducts(
+      final response = await _productService.getProducts(
         categoryId: categoryId,
         search: searchQuery.value.trim().isNotEmpty
             ? searchQuery.value.trim()
@@ -103,9 +111,8 @@ class HomeController extends GetxController {
         }
         hasMorePages.value = response.data!.length == 20;
       }
-    } catch (e) {
+    } catch (_) {
       Get.snackbar('Erreur', 'Impossible de charger les produits');
-      print('fetchProducts error: $e');
     } finally {
       isLoadingProducts.value = false;
       isLoadingMore.value = false;
@@ -129,9 +136,8 @@ class HomeController extends GetxController {
     fetchProducts();
   }
 
+  @override
   Future<void> refresh() async {
     await Future.wait([fetchCategories(), fetchProducts()]);
   }
 }
-
-  

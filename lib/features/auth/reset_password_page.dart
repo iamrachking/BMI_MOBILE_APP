@@ -43,9 +43,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     }
     final args = Get.arguments as Map<String, String>?;
     if (args != null) {
-      if (args['email'] != null && args['email']!.isNotEmpty) _emailController.text = args['email']!;
-      if (args['token'] != null && args['token']!.isNotEmpty) _tokenController.text = args['token']!;
-      _fromEmailLink = _emailController.text.isNotEmpty && _tokenController.text.isNotEmpty;
+      if (args['email'] != null && args['email']!.isNotEmpty) {
+        _emailController.text = args['email']!;
+      }
+      if (args['token'] != null && args['token']!.isNotEmpty) {
+        _tokenController.text = args['token']!;
+      }
+      _fromEmailLink =
+          _emailController.text.isNotEmpty && _tokenController.text.isNotEmpty;
     }
   }
 
@@ -54,7 +59,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     try {
       uri = await AppLinks().getInitialLink();
     } catch (_) {}
-    if (uri == null || !mounted) return;
+    if (uri == null || !mounted) {
+      return;
+    }
     final token = _extractTokenFromUri(uri);
     final email = uri.queryParameters['email'] ?? '';
     final isResetUri = _isResetPasswordUri(uri);
@@ -68,19 +75,26 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   bool _isResetPasswordUri(Uri uri) {
     if (uri.scheme == 'bmi' && uri.host == 'reset-password') return true;
-    if (uri.scheme != 'https' || uri.host != ApiConfig.resetPasswordHost) return false;
+    if (uri.scheme != 'https' || uri.host != ApiConfig.resetPasswordHost) {
+      return false;
+    }
     return uri.path == ApiConfig.resetPasswordPath ||
         uri.path.startsWith('${ApiConfig.resetPasswordPath}/');
   }
 
   String _extractTokenFromUri(Uri uri) {
-    final fromQuery = uri.queryParameters['token'] ??
+    final fromQuery =
+        uri.queryParameters['token'] ??
         uri.queryParameters['reset_token'] ??
         uri.queryParameters['key'] ??
         '';
-    if (fromQuery.isNotEmpty) return fromQuery;
+    if (fromQuery.isNotEmpty) {
+      return fromQuery;
+    }
     final segments = uri.pathSegments;
-    if (segments.length >= 2 && segments[0] == 'reset-password') return segments[1];
+    if (segments.length >= 2 && segments[0] == 'reset-password') {
+      return segments[1];
+    }
     return '';
   }
 
@@ -118,9 +132,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     'Nouveau mot de passe',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1F2937),
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF1F2937),
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -162,10 +176,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     decoration: _decoration('••••••••').copyWith(
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                          _obscurePassword
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
                           color: Colors.grey.shade600,
                         ),
-                        onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                        onPressed: () => setState(
+                          () => _obscurePassword = !_obscurePassword,
+                        ),
                       ),
                     ),
                     obscureText: _obscurePassword,
@@ -179,10 +197,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     decoration: _decoration('••••••••').copyWith(
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscureConfirm ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                          _obscureConfirm
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
                           color: Colors.grey.shade600,
                         ),
-                        onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
+                        onPressed: () =>
+                            setState(() => _obscureConfirm = !_obscureConfirm),
                       ),
                     ),
                     obscureText: _obscureConfirm,
@@ -190,7 +211,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   ),
                   Obx(() {
                     final error = auth.errorMessage.value;
-                    if (error == null || error.isEmpty) return const SizedBox.shrink();
+                    if (error == null || error.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
                     return Padding(
                       padding: const EdgeInsets.only(top: 12),
                       child: Text(
@@ -229,7 +252,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   const SizedBox(height: 24),
                   TextButton(
                     onPressed: () => Get.offAllNamed(AppRoutes.login),
-                    style: TextButton.styleFrom(foregroundColor: AppTheme.primary),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppTheme.primary,
+                    ),
                     child: const Text('Retour à la connexion'),
                   ),
                   const SizedBox(height: 24),

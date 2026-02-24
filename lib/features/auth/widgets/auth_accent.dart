@@ -19,29 +19,11 @@ class AuthAccent extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (position) {
       case AuthAccentPosition.topRight:
-        return _build(
-          top: 0,
-          right: 0,
-          angle: 0.4,
-          width: 120,
-          height: 200,
-        );
+        return _build(top: 0, right: 0, angle: 0.4, width: 120, height: 200);
       case AuthAccentPosition.topLeft:
-        return _build(
-          top: 0,
-          left: 0,
-          angle: -0.35,
-          width: 100,
-          height: 180,
-        );
+        return _build(top: 0, left: 0, angle: -0.35, width: 100, height: 180);
       case AuthAccentPosition.bottomLeft:
-        return _build(
-          bottom: 0,
-          left: 0,
-          angle: 0.5,
-          width: 140,
-          height: 160,
-        );
+        return _build(bottom: 0, left: 0, angle: 0.5, width: 140, height: 160);
       case AuthAccentPosition.bottomRight:
         return _build(
           bottom: 0,

@@ -52,9 +52,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   Text(
                     'Changer le mot de passe',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1F2937),
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF1F2937),
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -72,10 +72,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     decoration: _decoration('••••••••').copyWith(
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscureCurrent ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                          _obscureCurrent
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
                           color: Colors.grey.shade600,
                         ),
-                        onPressed: () => setState(() => _obscureCurrent = !_obscureCurrent),
+                        onPressed: () =>
+                            setState(() => _obscureCurrent = !_obscureCurrent),
                       ),
                     ),
                     obscureText: _obscureCurrent,
@@ -89,10 +92,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     decoration: _decoration('••••••••').copyWith(
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscureNew ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                          _obscureNew
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
                           color: Colors.grey.shade600,
                         ),
-                        onPressed: () => setState(() => _obscureNew = !_obscureNew),
+                        onPressed: () =>
+                            setState(() => _obscureNew = !_obscureNew),
                       ),
                     ),
                     obscureText: _obscureNew,
@@ -106,10 +112,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     decoration: _decoration('••••••••').copyWith(
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscureConfirm ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                          _obscureConfirm
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
                           color: Colors.grey.shade600,
                         ),
-                        onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
+                        onPressed: () =>
+                            setState(() => _obscureConfirm = !_obscureConfirm),
                       ),
                     ),
                     obscureText: _obscureConfirm,
@@ -117,7 +126,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   ),
                   Obx(() {
                     final error = auth.errorMessage.value;
-                    if (error == null || error.isEmpty) return const SizedBox.shrink();
+                    if (error == null || error.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
                     return Padding(
                       padding: const EdgeInsets.only(top: 12),
                       child: Text(
@@ -132,7 +143,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   const SizedBox(height: 28),
                   Obx(
                     () => FilledButton(
-                      onPressed: auth.loading.value ? null : () => _change(auth),
+                      onPressed: auth.loading.value
+                          ? null
+                          : () => _change(auth),
                       style: FilledButton.styleFrom(
                         backgroundColor: AppTheme.primary,
                         foregroundColor: Colors.white,

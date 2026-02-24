@@ -8,6 +8,15 @@ class AppTheme {
   static const Color primary = Color(0xFF2E4053);
   static const Color background = Color(0xFFF9FAFC);
 
+  /// Snackbar succès / info : couleur de l'app avec opacité pour différencier.
+  static Color get snackbarSuccess => primary.withValues(alpha: 0.92);
+
+  /// Snackbar avertissement (ex. stock épuisé) : couleur de l'app avec opacité.
+  static Color get snackbarWarning => primary.withValues(alpha: 0.88);
+
+  /// Snackbar erreur : rouge semi-transparent.
+  static Color get snackbarError => Colors.red.withValues(alpha: 0.88);
+
   static ThemeData get theme => ThemeData(
     useMaterial3: true,
     colorScheme: ColorScheme.fromSeed(

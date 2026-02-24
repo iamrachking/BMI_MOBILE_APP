@@ -86,23 +86,54 @@ class AuthService {
     );
   }
 
-  /// Update profile
+  /// Update profile (PATCH /user). Gère réponses imbriquées et erreurs Dio.
   Future<ApiResponse<UserModel>> updateProfile({
     String? name,
     String? email,
     String? phone,
     String? address,
   }) async {
-    final data = <String, dynamic>{};
-    if (name != null) data['name'] = name;
-    if (email != null) data['email'] = email;
-    if (phone != null) data['phone'] = phone;
-    if (address != null) data['address'] = address;
-    final res = await _dio.patch('/user', data: data);
-    return ApiResponse.fromJson(
-      res.data as Map<String, dynamic>,
-      (d) => UserModel.fromJson(d as Map<String, dynamic>),
-    );
+    final payload = <String, dynamic>{};
+    if (name != null) payload['name'] = name;
+    if (email != null) payload['email'] = email;
+    if (phone != null) payload['phone'] = phone;
+    if (address != null) payload['address'] = address;
+    try {
+      final res = await _dio.patch('/user', data: payload);
+      final body = res.data is Map<String, dynamic>
+          ? Map<String, dynamic>.from(res.data as Map<String, dynamic>)
+          : <String, dynamic>{};
+      dynamic data = body['data'];
+      if (data is Map) {
+        if (data.containsKey('data')) data = data['data'];
+        if (data.containsKey('user')) data = data['user'];
+        body['data'] = data;
+      }
+      return ApiResponse.fromJson(
+        body,
+        (d) => UserModel.fromJson(d as Map<String, dynamic>),
+      );
+    } on DioException catch (e) {
+      final data = e.response?.data;
+      String message = 'Impossible d\'enregistrer.';
+      if (data is Map<String, dynamic>) {
+        message =
+            data['message'] as String? ??
+            (data['errors'] is Map
+                ? (data['errors'] as Map).values
+                      .expand((v) => v is List ? v : [v])
+                      .join(', ')
+                : message);
+      }
+      return ApiResponse(success: false, message: message);
+    } catch (e) {
+      return ApiResponse(
+        success: false,
+        message: e.toString().contains('type') || e.toString().length > 80
+            ? 'Impossible d\'enregistrer.'
+            : e.toString(),
+      );
+    }
   }
 
   /// Mot de passe oublié : réponse 200 = succès (même si le body n'a pas success: true)
@@ -134,7 +165,7 @@ class AuthService {
         'password_confirmation': passwordConfirmation,
       },
     );
-    return ApiResponse.fromJson(res.data as Map<String, dynamic>, (_) => null);
+    return ApiResponse.fromJson(res.data as Map<String, dynamic>, (_) {});
   }
 
   /// Changer le mot de passe
@@ -151,10 +182,10 @@ class AuthService {
         'password_confirmation': passwordConfirmation,
       },
     );
-    return ApiResponse.fromJson(res.data as Map<String, dynamic>, (_) => null);
+    return ApiResponse.fromJson(res.data as Map<String, dynamic>, (_) {});
   }
 
-  /// Upload profile photo
+  /// Upload profile photo (POST /user/photo, multipart)
   Future<ApiResponse<UserModel>> uploadProfilePhoto(File photo) async {
     final formData = FormData.fromMap({
       'photo': await MultipartFile.fromFile(
@@ -170,8 +201,12 @@ class AuthService {
         headers: {'Accept': 'application/json'},
       ),
     );
+    final body = res.data as Map<String, dynamic>;
+    if (body['data'] is Map && (body['data'] as Map).containsKey('data')) {
+      body['data'] = (body['data'] as Map)['data'];
+    }
     return ApiResponse.fromJson(
-      res.data as Map<String, dynamic>,
+      body,
       (d) => UserModel.fromJson(d as Map<String, dynamic>),
     );
   }

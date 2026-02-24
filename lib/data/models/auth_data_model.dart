@@ -19,6 +19,4 @@ class AuthDataModel {
       user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
     );
   }
-
-  Object? operator [](String other) {}
 }

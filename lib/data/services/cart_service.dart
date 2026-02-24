@@ -12,9 +12,9 @@ class CartService {
     final res = await _dio.get('/cart');
     final body = res.data as Map<String, dynamic>;
 
-    if(body['data'] is Map && body['data']['data'] is Map) {
+    if (body['data'] is Map && body['data']['data'] is Map) {
       body['data'] = body['data']['data'];
-    } 
+    }
     return ApiResponse.fromJson(
       body,
       (d) => CartModel.fromJson(d as Map<String, dynamic>),
@@ -30,45 +30,83 @@ class CartService {
     );
   }
 
-  /// Add item to cart
+  /// Add item to cart. En cas de 422 (stock insuffisant), retourne success: false avec message clair.
   Future<ApiResponse<CartModel>> addItem({
     required int productId,
     int quantity = 1,
   }) async {
-    final res = await _dio.post(
-      '/cart/items',
-      data: {'product_id': productId, 'quantity': quantity},
-    );
-    final body = res.data as Map<String, dynamic>;
-
-    if(body['data'] is Map && body['data']['data'] is Map) {
-      body['data'] = body['data']['data'];
-    } 
-
-    return ApiResponse.fromJson(
-      body,
-      (d) => CartModel.fromJson(d as Map<String, dynamic>),
-    );
+    try {
+      final res = await _dio.post(
+        '/cart/items',
+        data: {'product_id': productId, 'quantity': quantity},
+      );
+      final body = res.data as Map<String, dynamic>;
+      if (body['data'] is Map && body['data']['data'] is Map) {
+        body['data'] = body['data']['data'];
+      }
+      return ApiResponse.fromJson(
+        body,
+        (d) => CartModel.fromJson(d as Map<String, dynamic>),
+      );
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 422) {
+        final msg = _extractMessage(e.response?.data);
+        final stockMsg =
+            msg.toLowerCase().contains('stock') ||
+            msg.toLowerCase().contains('épuisé') ||
+            msg.toLowerCase().contains('insuffisant') ||
+            msg.toLowerCase().contains('disponible');
+        return ApiResponse<CartModel>(
+          success: false,
+          message: stockMsg
+              ? 'Stock insuffisant. La quantité demandée n\'est plus disponible.'
+              : (msg.isNotEmpty
+                    ? msg
+                    : 'Stock insuffisant. La quantité demandée n\'est plus disponible.'),
+        );
+      }
+      rethrow;
+    }
   }
 
-  /// Update item quantity
+  /// Update item quantity. En cas de 422 (stock insuffisant), retourne success: false avec message clair.
   Future<ApiResponse<CartModel>> updateItemQuantity(
     int cartItemId,
     int quantity,
   ) async {
-    final res = await _dio.patch(
-      '/cart/items/$cartItemId',
-      data: {'quantity': quantity},
-    );
-    final body = res.data as Map<String, dynamic>;
+    try {
+      final res = await _dio.patch(
+        '/cart/items/$cartItemId',
+        data: {'quantity': quantity},
+      );
+      final body = res.data as Map<String, dynamic>;
+      if (body['data'] is Map && body['data']['data'] is Map) {
+        body['data'] = body['data']['data'];
+      }
+      return ApiResponse.fromJson(
+        body,
+        (d) => CartModel.fromJson(d as Map<String, dynamic>),
+      );
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 422) {
+        return ApiResponse<CartModel>(
+          success: false,
+          message:
+              'Stock insuffisant. La quantité demandée n\'est plus disponible.',
+        );
+      }
+      rethrow;
+    }
+  }
 
-    if(body['data'] is Map && body['data']['data'] is Map) {
-      body['data'] = body['data']['data'];
-    } 
-    return ApiResponse.fromJson(
-      body,
-      (d) => CartModel.fromJson(d as Map<String, dynamic>),
-    );
+  static String _extractMessage(dynamic data) {
+    if (data is Map<String, dynamic>) {
+      return data['message'] as String? ?? '';
+    }
+    if (data is Map && data['message'] != null) {
+      return data['message'].toString();
+    }
+    return '';
   }
 
   /// Remove item from cart
@@ -76,9 +114,9 @@ class CartService {
     final res = await _dio.delete('/cart/items/$cartItemId');
     final body = res.data as Map<String, dynamic>;
 
-    if(body['data'] is Map && body['data']['data'] is Map) {
+    if (body['data'] is Map && body['data']['data'] is Map) {
       body['data'] = body['data']['data'];
-    } 
+    }
     return ApiResponse.fromJson(
       body,
       (d) => CartModel.fromJson(d as Map<String, dynamic>),

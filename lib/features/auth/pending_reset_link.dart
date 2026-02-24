@@ -16,7 +16,10 @@ class PendingResetLink {
   static String? get email => _email;
 
   static bool get hasData =>
-      _token != null && _token!.isNotEmpty && _email != null && _email!.isNotEmpty;
+      _token != null &&
+      _token!.isNotEmpty &&
+      _email != null &&
+      _email!.isNotEmpty;
 
   static void clear() {
     _token = null;
@@ -25,7 +28,9 @@ class PendingResetLink {
 
   static bool isResetPasswordUri(Uri uri) {
     if (uri.scheme == 'bmi' && uri.host == 'reset-password') return true;
-    if (uri.scheme != 'https' || uri.host != ApiConfig.resetPasswordHost) return false;
+    if (uri.scheme != 'https' || uri.host != ApiConfig.resetPasswordHost) {
+      return false;
+    }
     final path = uri.path;
     return path == ApiConfig.resetPasswordPath ||
         path == '${ApiConfig.resetPasswordPath}/' ||
@@ -40,13 +45,16 @@ class PendingResetLink {
   }
 
   static String _extractToken(Uri uri) {
-    final fromQuery = uri.queryParameters['token'] ??
+    final fromQuery =
+        uri.queryParameters['token'] ??
         uri.queryParameters['reset_token'] ??
         uri.queryParameters['key'] ??
         '';
     if (fromQuery.isNotEmpty) return fromQuery;
     final segments = uri.pathSegments;
-    if (segments.length >= 2 && segments[0] == 'reset-password') return segments[1];
+    if (segments.length >= 2 && segments[0] == 'reset-password') {
+      return segments[1];
+    }
     return '';
   }
 }

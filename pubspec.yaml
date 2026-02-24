@@ -16,7 +16,8 @@ dependencies:
   dio: ^5.7.0
   get_storage: ^2.1.1
   http: ^1.2.0
-  
+  image_picker: ^1.0.7
+  webview_flutter: ^4.10.0
 
 dev_dependencies:
   flutter_test:

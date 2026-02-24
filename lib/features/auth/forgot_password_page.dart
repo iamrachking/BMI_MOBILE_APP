@@ -46,9 +46,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     'Mot de passe oublié',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1F2937),
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF1F2937),
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -88,7 +88,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   ),
                   Obx(() {
                     final error = auth.errorMessage.value;
-                    if (error == null || error.isEmpty) return const SizedBox.shrink();
+                    if (error == null || error.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
                     return Padding(
                       padding: const EdgeInsets.only(top: 12),
                       child: Text(
@@ -152,9 +154,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     final ok = await auth.forgotPassword(email);
     if (!mounted) return;
     if (ok) {
-      // Afficher le snackbar en haut, bien visible
       _showSuccessSnackbar(email);
-      // Laisser le temps de lire le message puis rediriger vers la connexion
       await Future.delayed(const Duration(milliseconds: 2500));
       if (mounted) Get.back();
     }
@@ -174,7 +174,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       shouldIconPulse: true,
       mainButton: TextButton(
         onPressed: () => Get.closeCurrentSnackbar(),
-        child: const Text('OK', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+        child: const Text(
+          'OK',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+        ),
       ),
     );
   }
