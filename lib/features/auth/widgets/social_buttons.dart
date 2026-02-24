@@ -7,7 +7,7 @@ class SocialButtonsRow extends StatelessWidget {
 
   static const _assets = [
     ('assets/images/logo_applee.jpg', Icons.apple),
-    ('assets/images/logo_googlee.png', Icons.g_mobiledata_outlined),
+    ('assets/images/google_logo.png', Icons.g_mobiledata_outlined),
     ('assets/images/logo_facebookk.png', Icons.facebook),
   ];
 
@@ -48,11 +48,23 @@ class _SocialCircle extends StatelessWidget {
               border: Border.all(color: Colors.grey.shade300),
             ),
             child: ClipOval(
-              child: Image.asset(
-                assetPath,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) =>
-                    Icon(icon, size: 28, color: AppTheme.primary),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Center(
+                  child: Image.asset(
+                    assetPath,
+                    fit: BoxFit.contain,
+                    width: 30,
+                    height: 30,
+                    errorBuilder: (_, __, ___) => SizedBox(
+                      width: 32,
+                      height: 32,
+                      child: Center(
+                        child: Icon(icon, size: 29, color: AppTheme.primary),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

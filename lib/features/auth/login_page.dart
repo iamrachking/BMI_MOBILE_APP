@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:ai4bmi/core/theme/app_theme.dart';
 import 'package:ai4bmi/features/auth/auth_controller.dart';
+import 'package:ai4bmi/features/auth/widgets/auth_accent.dart';
 import 'package:ai4bmi/features/auth/widgets/social_buttons.dart';
 import 'package:ai4bmi/routes/app_routes.dart';
 
@@ -34,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: Stack(
           children: [
-            _buildTopAccent(),
+            const AuthAccent(position: AuthAccentPosition.topRight),
             SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 70),
               child: Column(
@@ -127,9 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () {
-                        // si le temps le permet, on pourra ajouter une fonctionnalité pour réinitialiser le mot de passe
-                      },
+                      onPressed: () => Get.toNamed(AppRoutes.forgotPassword),
                       style: TextButton.styleFrom(
                         foregroundColor: AppTheme.primary,
                         padding: EdgeInsets.zero,
@@ -235,31 +234,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTopAccent() {
-    return Positioned(
-      top: 0,
-      right: 0,
-      child: Transform.rotate(
-        angle: 0.4,
-        child: Container(
-          width: 120,
-          height: 200,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                AppTheme.primary.withValues(alpha: 0.15),
-                AppTheme.primary.withValues(alpha: 0.05),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(24),
-          ),
         ),
       ),
     );

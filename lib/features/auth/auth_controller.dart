@@ -65,5 +65,74 @@ class AuthController extends GetxController {
     Get.offAllNamed(AppRoutes.login);
   }
 
+  /// Mot de passe oublié — envoi du lien par email
+  Future<bool> forgotPassword(String email) async {
+    loading.value = true;
+    errorMessage.value = null;
+    try {
+      final res = await _auth.forgotPassword(email);
+      if (res.success) return true;
+      errorMessage.value = res.message;
+      return false;
+    } catch (e) {
+      errorMessage.value = AuthService.getErrorMessage(e);
+      return false;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  /// Réinitialisation avec token reçu par email
+  Future<bool> resetPassword({
+    required String email,
+    required String token,
+    required String password,
+    required String passwordConfirmation,
+  }) async {
+    loading.value = true;
+    errorMessage.value = null;
+    try {
+      final res = await _auth.resetPassword(
+        email: email,
+        token: token,
+        password: password,
+        passwordConfirmation: passwordConfirmation,
+      );
+      if (res.success) return true;
+      errorMessage.value = res.message;
+      return false;
+    } catch (e) {
+      errorMessage.value = AuthService.getErrorMessage(e);
+      return false;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  /// Changer le mot de passe (utilisateur connecté)
+  Future<bool> changePassword({
+    required String currentPassword,
+    required String password,
+    required String passwordConfirmation,
+  }) async {
+    loading.value = true;
+    errorMessage.value = null;
+    try {
+      final res = await _auth.changePassword(
+        currentPassword: currentPassword,
+        password: password,
+        passwordConfirmation: passwordConfirmation,
+      );
+      if (res.success) return true;
+      errorMessage.value = res.message;
+      return false;
+    } catch (e) {
+      errorMessage.value = AuthService.getErrorMessage(e);
+      return false;
+    } finally {
+      loading.value = false;
+    }
+  }
+
   static bool get isLoggedIn => TokenStorage.isLoggedIn;
 }

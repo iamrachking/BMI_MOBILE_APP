@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:ai4bmi/core/theme/app_theme.dart';
 import 'package:ai4bmi/features/auth/auth_controller.dart';
+import 'package:ai4bmi/features/auth/widgets/auth_accent.dart';
 import 'package:ai4bmi/features/auth/widgets/social_buttons.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -42,9 +43,12 @@ class _RegisterPageState extends State<RegisterPage> {
         foregroundColor: const Color(0xFF1F2937),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
+        child: Stack(
+          children: [
+            const AuthAccent(position: AuthAccentPosition.topLeft),
+            SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
@@ -264,6 +268,8 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 24),
             ],
           ),
+        ),
+          ],
         ),
       ),
     );

@@ -105,6 +105,55 @@ class AuthService {
     );
   }
 
+  /// Mot de passe oublié : réponse 200 = succès (même si le body n'a pas success: true)
+  Future<ApiResponse<void>> forgotPassword(String email) async {
+    final res = await _dio.post('/forgot-password', data: {'email': email});
+    final data = res.data is Map<String, dynamic>
+        ? res.data as Map<String, dynamic>
+        : <String, dynamic>{};
+    final success = data['success'] as bool? ?? true;
+    final message =
+        data['message'] as String? ??
+        'Si un compte existe avec cet e-mail, un lien de réinitialisation a été envoyé.';
+    return ApiResponse(success: success, message: message);
+  }
+
+  /// Réinitialiser le mot de passe
+  Future<ApiResponse<void>> resetPassword({
+    required String email,
+    required String token,
+    required String password,
+    required String passwordConfirmation,
+  }) async {
+    final res = await _dio.post(
+      '/password/reset',
+      data: {
+        'email': email,
+        'token': token,
+        'password': password,
+        'password_confirmation': passwordConfirmation,
+      },
+    );
+    return ApiResponse.fromJson(res.data as Map<String, dynamic>, (_) => null);
+  }
+
+  /// Changer le mot de passe
+  Future<ApiResponse<void>> changePassword({
+    required String currentPassword,
+    required String password,
+    required String passwordConfirmation,
+  }) async {
+    final res = await _dio.patch(
+      '/user/password',
+      data: {
+        'current_password': currentPassword,
+        'password': password,
+        'password_confirmation': passwordConfirmation,
+      },
+    );
+    return ApiResponse.fromJson(res.data as Map<String, dynamic>, (_) => null);
+  }
+
   /// Upload profile photo
   Future<ApiResponse<UserModel>> uploadProfilePhoto(File photo) async {
     final formData = FormData.fromMap({

@@ -114,7 +114,19 @@ Body JSON :
 
 Réponse **200** : même structure que l’inscription (`data.token`, `data.user`).
 
-### 2.3 Déconnexion (auth)
+### 2.3 Mot de passe oublié (public)
+
+**POST** `/forgot-password`
+
+Body JSON : `{ "email": "jean@example.com" }`. Envoie un email avec un lien de réinitialisation (token inclus). Pour la sécurité, la réponse est la même que l'email existe ou non. Réponse **200** : `success`, `message` ("Si un compte existe avec cet email, un lien de réinitialisation a été envoyé."), `data: null`. **422** : email invalide. Flux app : l'utilisateur ouvre le lien reçu par email ; l'app peut parser l'URL pour récupérer `token` et `email`, puis afficher un écran « Nouveau mot de passe » et appeler **POST** `/password/reset`.
+
+### 2.4 Réinitialiser le mot de passe (public)
+
+**POST** `/password/reset`
+
+Body JSON : `email`, `token` (reçu par email dans le lien), `password`, `password_confirmation`. Mêmes règles mot de passe que l'inscription. Réponse **200** : "Mot de passe réinitialisé. Vous pouvez vous connecter." Réponse **422** : token invalide/expiré ou validation.
+
+### 2.5 Déconnexion (auth)
 
 **POST** `/logout`
 
@@ -122,7 +134,7 @@ Headers : `Authorization: Bearer {token}`. Pas de body.
 
 Réponse **200** : `{ "success": true, "message": "..." }`. Invalider le token côté app.
 
-### 2.4 Utilisateur courant (auth)
+### 2.6 Utilisateur courant (auth)
 
 **GET** `/user`
 
@@ -143,7 +155,7 @@ Réponse **200** :
 }
 ```
 
-### 2.5 Modifier le profil (auth)
+### 2.7 Modifier le profil (auth)
 
 **PATCH** `/user`
 
@@ -158,13 +170,38 @@ Body JSON (tous optionnels) :
 ```
 Réponse **200** : `data` = objet user mis à jour (même forme que GET `/user`).
 
-### 2.6 Photo de profil (auth)
+### 2.8 Photo de profil (auth)
 
 **POST** `/user/photo`
 
 Content-Type : `multipart/form-data`, champ **`photo`** (fichier image, max 2 Mo).
 
 Réponse **200** : `data` = user avec `profile_photo_url` mis à jour.
+
+### 2.9 Changer le mot de passe (auth)
+
+**PATCH** `/user/password`
+
+Headers : `Authorization: Bearer {token}`.
+
+Body JSON :
+```json
+{
+  "current_password": "ancien_mot_de_passe",
+  "password": "nouveau_mot_de_passe",
+  "password_confirmation": "nouveau_mot_de_passe"
+}
+```
+
+Réponse **200** :
+```json
+{
+  "success": true,
+  "message": "Mot de passe mis à jour.",
+  "data": null
+}
+```
+Réponse **401** : non authentifié. Réponse **422** : mot de passe actuel incorrect ou validation.
 
 ---
 
@@ -403,10 +440,13 @@ Réponse **200** : `data` = commande avec `status: "cancelled"`. **422** si la c
 |--------|--------|------|------|
 | POST | /register | Non | Inscription + token + user |
 | POST | /login | Non | Connexion + token + user |
+| POST | /forgot-password | Non | Mot de passe oublié (envoi email) |
+| POST | /password/reset | Non | Réinitialiser le mot de passe (token + email) |
 | POST | /logout | Oui | Déconnexion |
 | GET | /user | Oui | Profil |
 | PATCH | /user | Oui | Modifier profil |
 | POST | /user/photo | Oui | Photo de profil (multipart) |
+| PATCH | /user/password | Oui | Changer le mot de passe (current_password + password) |
 | GET | /categories | Oui | Liste catégories (pag.) |
 | GET | /categories/{id} | Oui | Détail catégorie |
 | GET | /products | Oui | Liste produits (pag., category_id, search) |
@@ -428,7 +468,7 @@ Réponse **200** : `data` = commande avec `status: "cancelled"`. **422** si la c
 ## 8. Flux utilisateur recommandé (app mobile)
 
 1. **Écran d’accueil** : si pas de token → Inscription / Connexion. Sinon → Accueil (catalogue ou profil).
-2. **Profil** : GET /user ; édition avec PATCH /user ; photo avec POST /user/photo.
+2. **Profil** : GET /user ; édition avec PATCH /user ; photo avec POST /user/photo ; changement de mot de passe avec PATCH /user/password (current_password, password, password_confirmation).
 3. **Catalogue** : GET /categories puis GET /products (avec category_id ou search). Détail produit : GET /products/{id}.
 4. **Panier** : GET /cart ; ajout POST /cart/items ; modification PATCH /cart/items/{id} ; suppression DELETE /cart/items/{id}.
 5. **Checkout** :  

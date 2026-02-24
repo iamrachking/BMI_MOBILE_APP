@@ -1,8 +1,8 @@
-import 'dart:async';
-
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:ai4bmi/features/auth/pending_reset_link.dart';
 import 'package:ai4bmi/core/storage/onboarding_storage.dart';
 import 'package:ai4bmi/core/storage/token_storage.dart';
 import 'package:ai4bmi/core/theme/app_theme.dart';
@@ -25,6 +25,26 @@ class _SplashPageState extends State<SplashPage> {
   Future<void> _navigateAfterDelay() async {
     await Future.delayed(const Duration(milliseconds: 2200));
     if (!mounted) return;
+
+    if (PendingResetLink.hasData) {
+      Get.offAllNamed(AppRoutes.login);
+      Get.toNamed(AppRoutes.resetPassword);
+      return;
+    }
+
+    final appLinks = AppLinks();
+    Uri? initialUri;
+    try {
+      initialUri = await appLinks.getInitialLink();
+    } catch (_) {}
+    if (initialUri != null && PendingResetLink.isResetPasswordUri(initialUri)) {
+      PendingResetLink.trySetFromUri(initialUri);
+      if (PendingResetLink.hasData) {
+        Get.offAllNamed(AppRoutes.login);
+        Get.toNamed(AppRoutes.resetPassword);
+        return;
+      }
+    }
 
     if (!OnboardingStorage.isDone) {
       Get.offAllNamed(AppRoutes.onboarding);
