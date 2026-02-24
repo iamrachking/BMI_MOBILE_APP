@@ -1,29 +1,29 @@
 # BMI SHOP
 
-**Boutique mobile pièces auto & moto** — Parcours complet : catalogue, panier, commande et paiement Mobile Money (FedaPay).
+**Boutique mobile pièces auto & moto**  Parcours complet : catalogue, panier, commande et paiement Mobile Money (FedaPay).
 
 ## Aperçu
 
 BMI SHOP est l’application mobile du projet **GL Hack 2026** (Groupe 5 E-Commerce). Elle permet de parcourir le catalogue, gérer le panier, passer commande et payer via FedaPay (Mobile Money) sans quitter l’app.
 
-- **Backend** : API Laravel — [Documentation](https://ai4bmi.cabinet-xaviertermeau.com/api-docs)
+- **Backend** : API Laravel  [Documentation](https://ai4bmi.cabinet-xaviertermeau.com/api-docs)
 
 
 ## Captures d’écran
 
-**Ligne 1 —** Splash · Onboarding · Connexion · Accueil
+ Splash · Onboarding · Connexion · Accueil
 
 | | | | |
 |:---:|:---:|:---:|:---:|
 | ![Splash](screenshots/splash.jpg) | ![Onboarding](screenshots/onboarding.jpg) | ![Connexion](screenshots/login.jpg) | ![Accueil](screenshots/home.jpg) |
 
-**Ligne 2 —** Catalogue · Détail produit · Panier · Commandes · Profil
+ Catalogue · Détail produit · Panier · Commandes · Profil
 
 | | | | | |
 |:---:|:---:|:---:|:---:|:---:|
 | ![Catalogue](screenshots/catalogue.jpg) | ![Détail produit](screenshots/product_detail.jpg) | ![Panier](screenshots/cart.jpg) | ![Commandes](screenshots/order_list.jpg) | ![Profil](screenshots/profil.jpg) |
 
----
+
 
 ## Démarrage rapide
 
