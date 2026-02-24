@@ -1,3 +1,4 @@
+import 'package:ai4bmi/core/network/api_client.dart';
 import 'package:get/get.dart';
 
 import 'package:ai4bmi/core/storage/token_storage.dart';
@@ -16,6 +17,7 @@ class AuthController extends GetxController {
     try {
       final res = await _auth.login(email: email, password: password);
       if (res.success && res.data != null) {
+        await ApiClient.setToken(res.data!.token);
         Get.offAllNamed(AppRoutes.home);
       } else {
         errorMessage.value = res.message;

@@ -10,7 +10,7 @@ import 'package:ai4bmi/data/models/user_model.dart';
 
 /// Authentification
 class AuthService {
-  final _dio = ApiClient.dio;
+  Dio get _dio => ApiClient.dio;
 
   /// Register
   Future<ApiResponse<AuthDataModel>> register({
@@ -75,8 +75,13 @@ class AuthService {
   /// Get current user
   Future<ApiResponse<UserModel>> getCurrentUser() async {
     final res = await _dio.get('/user');
+    final body = res.data as Map<String, dynamic>;
+
+    if (body['data'] is Map && (body['data'] as Map).containsKey('data')) {
+      body['data'] = body['data']['data'];
+    }
     return ApiResponse.fromJson(
-      res.data as Map<String, dynamic>,
+      body,
       (d) => UserModel.fromJson(d as Map<String, dynamic>),
     );
   }

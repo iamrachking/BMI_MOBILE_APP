@@ -2,10 +2,11 @@ import 'package:ai4bmi/core/network/api_client.dart';
 import 'package:ai4bmi/data/models/api_response.dart';
 import 'package:ai4bmi/data/models/category_model.dart';
 import 'package:ai4bmi/data/models/product_model.dart';
+import 'package:dio/dio.dart';
 
 /// Catalogue
 class ProductService {
-  final _dio = ApiClient.dio;
+  Dio get _dio => ApiClient.dio;
 
   /// Get all categories
   Future<ApiResponse<List<CategoryModel>>> getCategories({
@@ -21,9 +22,12 @@ class ProductService {
     );
     return ApiResponse.fromJson(
       res.data as Map<String, dynamic>,
-      (d) => (d as List)
-          .map((e) => CategoryModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      (d) {
+        final List items = d is Map ? (d['data'] as List? ?? []) : (d as List);
+        return items 
+            .map((e) => CategoryModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      },
     );
   }
 
@@ -41,16 +45,23 @@ class ProductService {
     int? categoryId,
     String? search,
     int perPage = 20,
+    int page = 1,
   }) async {
-    final q = <String, dynamic>{'per_page': perPage};
+    final q = <String, dynamic>{
+      'per_page': perPage,
+      'page': page,
+    };
     if (categoryId != null) q['category_id'] = categoryId;
     if (search != null && search.isNotEmpty) q['search'] = search;
     final res = await _dio.get('/products', queryParameters: q);
     return ApiResponse.fromJson(
       res.data as Map<String, dynamic>,
-      (d) => (d as List)
-          .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      (d) {
+        final List items = d is Map ? (d['data'] as List? ?? []) : (d as List);
+        return items
+            .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      }
     );
   }
 

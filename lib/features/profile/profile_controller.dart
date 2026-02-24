@@ -1,19 +1,24 @@
+import 'package:ai4bmi/routes/app_routes.dart';
 import 'package:get/get.dart';
 
 import 'package:ai4bmi/data/models/user_model.dart';
 import 'package:ai4bmi/data/services/auth_service.dart';
-import 'package:ai4bmi/features/auth/auth_controller.dart';
+
 
 class ProfileController extends GetxController {
   final AuthService _authService = AuthService();
 
   final loading = true.obs;
   final user = Rx<UserModel?>(null);
+  bool _loaded = false;
 
   @override
   void onReady() {
+    super.onInit();
+    if (!_loaded) {
+    _loaded = true;
     loadUser();
-    super.onReady();
+  }
   }
 
   Future<void> loadUser() async {
@@ -23,7 +28,8 @@ class ProfileController extends GetxController {
       if (res.success && res.data != null) {
         user.value = res.data;
       }
-    } catch (_) {
+    } catch (e) {
+      print('User error: $e');
       user.value = null;
     } finally {
       loading.value = false;
@@ -31,7 +37,9 @@ class ProfileController extends GetxController {
   }
 
   Future<void> logout() async {
-    final auth = Get.find<AuthController>();
-    await auth.logout();
+    // final auth = Get.find<AuthController>();
+    // await auth.logout();
+    await _authService.logout();
+    Get.offAllNamed(AppRoutes.login);
   }
 }

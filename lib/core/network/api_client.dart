@@ -49,8 +49,8 @@ class ApiClient {
   }
 
   /// Appeler après login/register pour mettre à jour le token.
-  static void setToken(String token) {
-    TokenStorage.saveToken(token);
+  static Future<void> setToken(String token) async {
+    await TokenStorage.saveToken(token);
     _dio = _createDio();
   }
 

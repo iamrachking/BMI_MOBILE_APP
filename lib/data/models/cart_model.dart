@@ -16,7 +16,7 @@ class CartModel {
 
   factory CartModel.fromJson(Map<String, dynamic> json) {
     return CartModel(
-      id: json['id'] as int,
+      id: json['id'] as int? ?? 0,
       itemsCount: json['items_count'] as int? ?? 0,
       subtotal: (json['subtotal'] is num)
           ? (json['subtotal'] as num).toDouble()
@@ -49,9 +49,9 @@ class CartItemModel {
 
   factory CartItemModel.fromJson(Map<String, dynamic> json) {
     return CartItemModel(
-      id: json['id'] as int,
-      productId: json['product_id'] as int,
-      quantity: json['quantity'] as int,
+      id: json['id'] as int? ?? 0,
+      productId: json['product_id'] as int? ?? 0,
+      quantity: json['quantity'] as int? ?? 1,
       unitPrice: (json['unit_price'] is num)
           ? (json['unit_price'] as num).toDouble()
           : 0,

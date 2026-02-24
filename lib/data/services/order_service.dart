@@ -1,10 +1,11 @@
 import 'package:ai4bmi/core/network/api_client.dart';
 import 'package:ai4bmi/data/models/api_response.dart';
 import 'package:ai4bmi/data/models/order_model.dart';
+import 'package:dio/dio.dart';
 
 /// Commandes
 class OrderService {
-  final _dio = ApiClient.dio;
+  Dio get _dio => ApiClient.dio;
 
   /// Get all orders
   Future<ApiResponse<List<OrderModel>>> getOrders({
@@ -14,8 +15,13 @@ class OrderService {
     final q = <String, dynamic>{'per_page': perPage};
     if (status != null && status.isNotEmpty) q['status'] = status;
     final res = await _dio.get('/orders', queryParameters: q);
+    final body = res.data as Map<String, dynamic>;
+    // print('GET ORDERS RAW: ${res.data}');
+    if (body['data'] is Map && body['data']['data'] is List) {
+    body['data'] = body['data']['data'];
+    }
     return ApiResponse.fromJson(
-      res.data as Map<String, dynamic>,
+      body,
       (d) => (d as List)
           .map((e) => OrderModel.fromJson(e as Map<String, dynamic>))
           .toList(),

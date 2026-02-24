@@ -1,3 +1,7 @@
+import 'package:ai4bmi/features/cart/cart_page.dart';
+import 'package:ai4bmi/features/home/product_detail.dart';
+import 'package:ai4bmi/features/orders/orders_page.dart';
+import 'package:ai4bmi/features/profile/profile.dart';
 import 'package:get/get.dart';
 
 import 'package:ai4bmi/features/auth/login_page.dart';
@@ -16,5 +20,9 @@ class AppPages {
     GetPage(name: AppRoutes.login, page: () => const LoginPage()),
     GetPage(name: AppRoutes.register, page: () => const RegisterPage()),
     GetPage(name: AppRoutes.home, page: () => const HomePlaceholderPage()),
+    GetPage(name: AppRoutes.productDetail, page: () => const ProductDetailScreen()),
+    GetPage(name: AppRoutes.cart, page: () => const CartScreen()),
+    GetPage(name: AppRoutes.orders, page: () => const OrdersScreen()),
+    GetPage(name: AppRoutes.profile, page: () => const ProfileScreen()),
   ];
 }
