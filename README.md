@@ -6,8 +6,9 @@
 
 BMI SHOP est l’application mobile du projet **GL Hack 2026** (Groupe 5 E-Commerce). Elle permet de parcourir le catalogue, gérer le panier, passer commande et payer via FedaPay (Mobile Money) sans quitter l’app.
 
-- **Backend** : API Laravel  [Documentation](https://ai4bmi.cabinet-xaviertermeau.com/api-docs)
+- **Backend** : API Laravel — [Documentation](https://ai4bmi.cabinet-xaviertermeau.com/api-docs)
 
+**Vidéo de présentation** : [Voir la démo sur Google Drive](https://drive.google.com/file/d/1C3CzX4meqSxC0ssOOFDAMObjFS-t1i_P/view?usp=drive_link)
 
 ## Captures d’écran
 
