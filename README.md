@@ -19,8 +19,6 @@ BMI SHOP est une application mobile e-commerce qui permet de parcourir le catalo
 
 - **Backend** : API Laravel — [Documentation](https://ai4bmi.cabinet-xaviertermeau.com/api-docs)
 
-**Vidéo de présentation** : [Voir la démo sur Google Drive](https://drive.google.com/file/d/1C3CzX4meqSxC0ssOOFDAMObjFS-t1i_P/view?usp=drive_link)
-
 ---
 
 ## Captures d’écran
