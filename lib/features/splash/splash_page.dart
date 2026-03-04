@@ -46,6 +46,7 @@ class _SplashPageState extends State<SplashPage> {
       }
     }
 
+    // Déjà connecté → accueil (même après fermeture et réouverture de l'app, le token est persisté).
     if (!OnboardingStorage.isDone) {
       Get.offAllNamed(AppRoutes.onboarding);
     } else if (TokenStorage.isLoggedIn) {

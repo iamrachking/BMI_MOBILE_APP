@@ -16,6 +16,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    // Marquer comme vu dès l'affichage : au prochain lancement l'onboarding ne réapparaîtra pas.
+    OnboardingStorage.setDone();
+  }
+
   static const _pages = [
     _OnboardingSlide(
       imagePath: 'assets/images/onboarding_1.png',

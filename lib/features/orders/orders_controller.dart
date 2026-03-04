@@ -22,13 +22,15 @@ class OrdersController extends GetxController {
 
   Timer? _checkoutPollTimer;
 
-  bool get isCheckout =>
-      Get.arguments is Map && (Get.arguments as Map)['checkout'] == true;
+  /// À appeler depuis l'écran quand on arrive avec arguments checkout: true.
+  /// (onReady ne s'exécute qu'une fois par instance ; en release le controller peut être réutilisé.)
+  void startCheckout() => _tryCheckout();
 
   @override
   void onReady() {
     loadOrders();
-    if (isCheckout) _tryCheckout();
+    // Le checkout est déclenché par OrdersScreen (initState postFrameCallback) pour éviter
+    // qu'en release le controller réutilisé ne relance jamais le checkout.
     super.onReady();
   }
 

@@ -1,6 +1,7 @@
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'package:ai4bmi/core/app_links_listener.dart';
 import 'package:ai4bmi/core/theme/app_theme.dart';
@@ -10,6 +11,7 @@ import 'package:ai4bmi/routes/app_routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
   await Future.delayed(const Duration(milliseconds: 400));
   try {
     final uri = await AppLinks().getInitialLink();

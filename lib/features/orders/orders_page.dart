@@ -29,8 +29,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && Get.isRegistered<OrdersController>()) {
-        Get.find<OrdersController>().loadOrders();
+      if (!mounted) return;
+      if (!Get.isRegistered<OrdersController>()) return;
+      final controller = Get.find<OrdersController>();
+      controller.loadOrders();
+      // Passer la commande : déclencher le checkout ici (en release le controller peut être réutilisé, onReady ne rappelle pas).
+      final args = Get.arguments;
+      if (args is Map && args['checkout'] == true) {
+        controller.startCheckout();
       }
     });
   }
